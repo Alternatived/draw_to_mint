@@ -1,117 +1,181 @@
-let cols = 8;
-let rows = 8;
-let grid = [];
-let pixelSize;
-let currentColor = [0, 0, 0];
-let drawing = false;
-
-let palette = [
-  [0, 0, 0],
-  [255, 0, 0],
-  [0, 255, 0],
-  [0, 0, 255],
-  [255, 255, 0],
-  [255, 0, 255],
-  [0, 255, 255],
-  [255, 255, 255],
-];
-
-let history = [];
+let gridSize = 8;
+let pixelSize = 20;
+let pixels = [];
+let currentColor = '#000000';
+let undoStack = [];
 let redoStack = [];
+let symmetryX = false;
+let symmetryY = false;
+let showGrid = false;
+let isDrawing = false;
+
+let palettes = {
+  Teletext: ['#000000', '#ff0000', '#00ff00', '#ffff00', '#0000ff', '#ff00ff', '#00ffff', '#ffffff'],
+  Gameboy: ['#0f380f', '#306230', '#8bac0f', '#9bbc0f'],
+  CMYK: ['#00FFFF', '#FF00FF', '#FFFF00', '#000000'],
+  Mono: ['#000000', '#222222', '#444444', '#666666', '#888888', '#aaaaaa', '#cccccc', '#ffffff']
+};
 
 function setup() {
-  let canvasSize = 400;
-  pixelSize = canvasSize / cols;
-  let canvas = createCanvas(canvasSize, canvasSize);
-  canvas.parent("canvas-container");
-  noStroke();
-  initGrid();
-  drawPalette();
+  let canvas = createCanvas(gridSize * pixelSize, gridSize * pixelSize);
+  canvas.parent('canvas-container');
+  noSmooth();
+
+  for (let y = 0; y < gridSize; y++) {
+    pixels[y] = [];
+    for (let x = 0; x < gridSize; x++) {
+      pixels[y][x] = '#000000';
+    }
+  }
+
+  updatePaletteUI();
+  createUIListeners();
 }
 
 function draw() {
-  background(220);
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      fill(grid[i][j]);
-      rect(i * pixelSize, j * pixelSize, pixelSize, pixelSize);
+  background('#ffffff');
+
+  for (let y = 0; y < gridSize; y++) {
+    for (let x = 0; x < gridSize; x++) {
+      fill(pixels[y][x]);
+      noStroke();
+      rect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
     }
   }
 
-  if (drawing && mouseIsPressed) drawPixel(mouseX, mouseY);
-}
-
-function initGrid() {
-  for (let i = 0; i < cols; i++) {
-    grid[i] = [];
-    for (let j = 0; j < rows; j++) {
-      grid[i][j] = [255, 255, 255];
+  if (showGrid) {
+    stroke(200);
+    strokeWeight(1);
+    for (let i = 0; i <= gridSize; i++) {
+      line(i * pixelSize, 0, i * pixelSize, height);
+      line(0, i * pixelSize, width, i * pixelSize);
     }
   }
-}
-
-function drawPixel(x, y) {
-  let i = floor(x / pixelSize);
-  let j = floor(y / pixelSize);
-  if (i >= 0 && i < cols && j >= 0 && j < rows) {
-    pushHistory();
-    grid[i][j] = currentColor.slice();
-  }
-}
-
-function drawPalette() {
-  let paletteDiv = document.getElementById("palette");
-  paletteDiv.innerHTML = "";
-  palette.forEach((color, index) => {
-    let btn = document.createElement("button");
-    btn.style.backgroundColor = `rgb(${color})`;
-    btn.className = "color-button";
-    btn.onclick = () => {
-      currentColor = color;
-    };
-    paletteDiv.appendChild(btn);
-  });
 }
 
 function mousePressed() {
-  drawing = true;
-  drawPixel(mouseX, mouseY);
+  isDrawing = true;
+  drawPixel();
+}
+
+function mouseDragged() {
+  drawPixel();
 }
 
 function mouseReleased() {
-  drawing = false;
+  isDrawing = false;
 }
 
-function pushHistory() {
-  let copy = grid.map(col => col.map(px => [...px]));
-  history.push(copy);
+function drawPixel() {
+  if (!isDrawing || !mouseInCanvas()) return;
+
+  let x = floor(mouseX / pixelSize);
+  let y = floor(mouseY / pixelSize);
+
+  if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
+    saveUndo();
+    setPixel(x, y, currentColor);
+  }
+}
+
+function setPixel(x, y, color) {
+  pixels[y][x] = color;
+
+  if (symmetryX) {
+    let sx = gridSize - 1 - x;
+    pixels[y][sx] = color;
+  }
+  if (symmetryY) {
+    let sy = gridSize - 1 - y;
+    pixels[sy][x] = color;
+  }
+  if (symmetryX && symmetryY) {
+    let sx = gridSize - 1 - x;
+    let sy = gridSize - 1 - y;
+    pixels[sy][sx] = color;
+  }
+}
+
+function mouseInCanvas() {
+  return mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height;
+}
+
+function createUIListeners() {
+  document.getElementById('clear').onclick = () => {
+    saveUndo();
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        pixels[y][x] = '#000000';
+      }
+    }
+  };
+
+  document.getElementById('fill').onclick = () => {
+    saveUndo();
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        pixels[y][x] = currentColor;
+      }
+    }
+  };
+
+  document.getElementById('undo').onclick = () => {
+    if (undoStack.length > 0) {
+      redoStack.push(JSON.parse(JSON.stringify(pixels)));
+      pixels = undoStack.pop();
+    }
+  };
+
+  document.getElementById('redo').onclick = () => {
+    if (redoStack.length > 0) {
+      undoStack.push(JSON.parse(JSON.stringify(pixels)));
+      pixels = redoStack.pop();
+    }
+  };
+
+  document.getElementById('symX').onclick = function () {
+    symmetryX = !symmetryX;
+    this.classList.toggle('active', symmetryX);
+  };
+
+  document.getElementById('symY').onclick = function () {
+    symmetryY = !symmetryY;
+    this.classList.toggle('active', symmetryY);
+  };
+
+  document.getElementById('gridToggle').onclick = function () {
+    showGrid = !showGrid;
+    this.classList.toggle('active', showGrid);
+  };
+
+  document.getElementById('palettePicker').onchange = function () {
+    updatePaletteUI(this.value);
+  };
+}
+
+function saveUndo() {
+  undoStack.push(JSON.parse(JSON.stringify(pixels)));
   redoStack = [];
 }
 
-function undo() {
-  if (history.length > 0) {
-    redoStack.push(grid.map(col => col.map(px => [...px])));
-    grid = history.pop();
-  }
-}
+function updatePaletteUI(paletteName = 'Teletext') {
+  let palette = palettes[paletteName];
+  let paletteContainer = document.getElementById('palette');
+  paletteContainer.innerHTML = '';
+  palette.forEach(color => {
+    let btn = document.createElement('div');
+    btn.className = 'color-button';
+    btn.style.backgroundColor = color;
+    btn.onclick = () => {
+      currentColor = color;
+      document.querySelectorAll('.color-button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    };
+    paletteContainer.appendChild(btn);
+  });
 
-function redo() {
-  if (redoStack.length > 0) {
-    history.push(grid.map(col => col.map(px => [...px])));
-    grid = redoStack.pop();
+  // Activate first color
+  if (paletteContainer.firstChild) {
+    paletteContainer.firstChild.click();
   }
-}
-
-function clearGrid() {
-  pushHistory();
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      grid[i][j] = [255, 255, 255];
-    }
-  }
-}
-
-function mintFrame() {
-  const data = grid.flat().map(c => c.join(",")).join(";");
-  alert("Minting frame: " + data);
 }
