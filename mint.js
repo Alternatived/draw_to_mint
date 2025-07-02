@@ -1,44 +1,45 @@
-const { BeaconWallet } = window.beacon;
-
-let wallet;
-let userAddress = null;
-
+// mint.js
 window.addEventListener('load', () => {
+  // Grab buttons and status element
   const connectBtn = document.getElementById("connectWallet");
   const mintBtn = document.getElementById("mint");
   const status = document.getElementById("status");
 
-  connectBtn.addEventListener("click", connectWallet);
-  mintBtn.addEventListener("click", mint);
+  // BeaconWallet instance and user address
+  let wallet;
+  let userAddress = null;
 
-  async function connectWallet() {
-    if (!wallet) {
-      wallet = new BeaconWallet({
-        name: "Draw to Mint",
-        preferredNetwork: "ghostnet" // ✅ or 'mainnet' for production
-      });
-    }
-
+  // Connect wallet on click
+  connectBtn.addEventListener("click", async () => {
     try {
+      if (!wallet) {
+        wallet = new window.beacon.BeaconWallet({
+          name: "Draw to Mint",
+          preferredNetwork: "ghostnet", // Use 'mainnet' when ready for production
+        });
+      }
+      // Request permissions — must be called inside click event for popup
       await wallet.requestPermissions({ network: { type: "ghostnet" } });
       userAddress = await wallet.getPKH();
-      status.innerText = "Wallet: " + shorten(userAddress);
+      status.innerText = "Wallet: " + shortenAddress(userAddress);
     } catch (err) {
-      console.error("Wallet connection failed:", err);
+      console.error("Wallet connect failed:", err);
       status.innerText = "❌ Wallet connection failed";
     }
-  }
+  });
 
-  async function mint() {
+  // Mint button click handler (placeholder)
+  mintBtn.addEventListener("click", async () => {
     if (!userAddress) {
-      await connectWallet();
+      // Try to connect wallet first
+      await connectBtn.click();
       if (!userAddress) return;
     }
+    alert(`Minting not implemented yet.\nConnected wallet: ${userAddress}`);
+  });
 
-    alert("Minting not implemented yet.\nWallet: " + userAddress);
-  }
-
-  function shorten(addr) {
+  // Helper to shorten the address for UI
+  function shortenAddress(addr) {
     return addr.slice(0, 6) + "..." + addr.slice(-4);
   }
 });
