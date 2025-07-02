@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Draw to Mint</title>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  
-  <!-- Beacon SDK exposing 'Beacon' global -->
+
+  <!-- Beacon SDK (window.Beacon) -->
   <script src="https://unpkg.com/@airgap/beacon-sdk@latest/dist/index.umd.js"></script>
-  
-  <!-- Your mint.js script, loaded after Beacon SDK -->
+
+  <!-- mint.js loads after Beacon SDK -->
   <script src="mint.js" defer></script>
 </head>
 <body>
@@ -53,6 +53,7 @@
     <div id="status" class="status">Wallet: Not connected</div>
   </div>
 
+  <!-- p5.js sketch script -->
   <script src="sketch.js"></script>
 </body>
 </html>
