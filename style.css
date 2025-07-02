@@ -1,102 +1,97 @@
 body {
   margin: 0;
+  background: #b0c4a5;
   font-family: 'VT323', monospace;
-  background-color: #c0c0c0;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100vh;
 }
 
-#app {
-  background: #e0ffe0;
-  border: 2px solid #005500;
-  padding: 16px;
-  box-shadow: 4px 4px #888;
+.window {
+  background: #e5f2dc;
+  border: 2px solid #2f4f2f;
+  box-shadow: 4px 4px 0 #2f4f2f;
+  padding: 12px;
   width: 360px;
 }
 
-.title {
+.title-bar {
+  font-weight: bold;
+  background: #2f4f2f;
+  color: #d0ffd0;
+  padding: 6px;
   text-align: center;
-  font-size: 24px;
-  color: #004400;
-  margin-bottom: 12px;
+  border: 1px solid #1c3c1c;
+  box-shadow: inset -1px -1px #163116, inset 1px 1px #3c6e3c;
+  font-size: 18px;
 }
 
 .section {
-  border-top: 2px solid #005500;
-  margin-top: 10px;
-  padding-top: 8px;
+  margin: 10px 0;
 }
 
-#canvas-container canvas {
+.section label {
   display: block;
-  margin: 0 auto 10px auto;
-  image-rendering: pixelated;
-  border: 2px inset #004400;
-  background: #000;
+  margin-bottom: 4px;
+  color: #003300;
 }
 
-.button-row {
+.palette {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 6px;
-  margin: 4px 0;
+}
+
+.color-button {
+  width: 22px;
+  height: 22px;
+  border: 1px solid #003300;
+  cursor: pointer;
+}
+
+.color-button.active {
+  outline: 2px solid #00cc00;
 }
 
 button {
   font-family: 'VT323', monospace;
-  background-color: #e0ffe0;
-  border: 2px outset #aaa;
-  padding: 4px 6px;
-  cursor: pointer;
   font-size: 14px;
-  color: #003300;
-  min-width: 60px;
+  background: #d0ffd0;
+  border: 2px solid #2f4f2f;
+  box-shadow: 1px 1px #fff, -1px -1px #999;
+  cursor: pointer;
+  padding: 5px 8px;
+  margin: 4px;
+  min-width: 64px;
 }
 
 button:active {
-  border: 2px inset #aaa;
+  box-shadow: inset 2px 2px #2f4f2f;
+  background: #a0f0a0;
 }
 
 button.active {
-  background-color: #ccffcc;
-  border: 2px inset #005500;
-  color: #002200;
+  background-color: #a0f0a0;
+  border-color: #006600;
 }
 
-#palette {
+.divider {
+  height: 2px;
+  background: #2f4f2f;
+  margin: 10px 0;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+#canvas-container {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 6px;
-}
-
-.color-btn {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #333;
-  cursor: pointer;
-}
-
-.color-btn.selected {
-  border: 2px solid #00ff00;
-  box-shadow: 0 0 4px #00ff00;
-}
-
-#palette-select {
-  font-family: 'VT323', monospace;
-  background: #e0ffe0;
-  border: 2px inset #aaa;
-  font-size: 14px;
-  padding: 2px 4px;
-  margin-left: 8px;
-}
-
-#wallet-status {
-  text-align: center;
-  font-size: 14px;
-  color: #004400;
-  margin-top: 6px;
+  align-items: center;
 }
