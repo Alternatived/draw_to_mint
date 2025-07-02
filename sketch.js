@@ -21,6 +21,7 @@ function setup() {
   canvas.parent('canvas-container');
   noSmooth();
 
+  // Init grid
   for (let y = 0; y < gridSize; y++) {
     pixels[y] = [];
     for (let x = 0; x < gridSize; x++) {
@@ -28,7 +29,7 @@ function setup() {
     }
   }
 
-  updatePaletteUI();
+  updatePaletteUI('Teletext');
   createUIListeners();
 }
 
@@ -44,7 +45,7 @@ function draw() {
   }
 
   if (showGrid) {
-    stroke(200);
+    stroke(180);
     strokeWeight(1);
     for (let i = 0; i <= gridSize; i++) {
       line(i * pixelSize, 0, i * pixelSize, height);
@@ -153,29 +154,32 @@ function createUIListeners() {
   };
 }
 
-function saveUndo() {
-  undoStack.push(JSON.parse(JSON.stringify(pixels)));
-  redoStack = [];
-}
-
-function updatePaletteUI(paletteName = 'Teletext') {
+function updatePaletteUI(paletteName) {
   let palette = palettes[paletteName];
   let paletteContainer = document.getElementById('palette');
   paletteContainer.innerHTML = '';
+
   palette.forEach(color => {
     let btn = document.createElement('div');
     btn.className = 'color-button';
     btn.style.backgroundColor = color;
+
     btn.onclick = () => {
       currentColor = color;
       document.querySelectorAll('.color-button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     };
+
     paletteContainer.appendChild(btn);
   });
 
-  // Activate first color
+  // Auto-select first color
   if (paletteContainer.firstChild) {
     paletteContainer.firstChild.click();
   }
+}
+
+function saveUndo() {
+  undoStack.push(JSON.parse(JSON.stringify(pixels)));
+  redoStack = [];
 }
