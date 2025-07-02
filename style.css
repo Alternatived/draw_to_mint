@@ -14,6 +14,11 @@ body {
   box-shadow: 4px 4px 0 #2f4f2f;
   padding: 12px;
   width: 360px;
+
+  /* NEW */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center all children horizontally */
 }
 
 .title-bar {
@@ -25,16 +30,29 @@ body {
   border: 1px solid #1c3c1c;
   box-shadow: inset -1px -1px #163116, inset 1px 1px #3c6e3c;
   font-size: 18px;
+  width: 100%; /* full width so it spans entire window */
 }
 
 .section {
   margin: 10px 0;
+  width: 100%; /* make sections full width inside window */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center content horizontally */
 }
 
 .section label {
   display: block;
   margin-bottom: 4px;
   color: #003300;
+  align-self: flex-start; /* keep label aligned left inside section */
+  padding-left: 8px; /* slight left padding for neatness */
+}
+
+#palettePicker {
+  width: 150px;
+  margin-bottom: 8px;
+  cursor: pointer;
 }
 
 .palette {
@@ -42,6 +60,7 @@ body {
   justify-content: center;
   flex-wrap: wrap;
   gap: 6px;
+  margin-top: 4px;
 }
 
 .color-button {
@@ -65,6 +84,7 @@ button {
   padding: 5px 8px;
   margin: 4px;
   min-width: 64px;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 button:active {
@@ -81,17 +101,20 @@ button.active {
   height: 2px;
   background: #2f4f2f;
   margin: 10px 0;
+  width: 100%;
 }
 
 .buttons {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 6px;
+  justify-content: center; /* CENTER buttons horizontally */
+  gap: 8px;
+  width: 100%;
 }
 
 #canvas-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
