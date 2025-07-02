@@ -7,21 +7,22 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
-  <script src="https://unpkg.com/@airgap/beacon-sdk"></script>
+  <script src="https://unpkg.com/@airgap/beacon-sdk@3.3.3/dist/index.umd.min.js"></script>
 </head>
 <body>
   <div id="app">
     <h1>Draw to Mint</h1>
     <div id="canvas-container"></div>
-    <div id="palette-container"></div>
-    <div id="buttons">
-      <button onclick="clearCanvas()">Clear</button>
-      <button onclick="undo()">Undo</button>
-      <button onclick="redo()">Redo</button>
-      <button onclick="mint()">Mint This Frame</button>
-      <p id="wallet-status">Wallet: Not connected</p>
+    <div id="palette"></div>
+    <div id="toolbar">
+      <button id="clear">Clear</button>
+      <button id="undo">Undo</button>
+      <button id="redo">Redo</button>
+      <button id="mint">Mint This Frame</button>
     </div>
+    <div id="wallet-status">Wallet: Not connected</div>
   </div>
+
   <script src="sketch.js"></script>
   <script src="mint.js"></script>
 </body>
