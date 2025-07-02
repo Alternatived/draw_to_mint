@@ -9,18 +9,18 @@ window.addEventListener('load', () => {
   async function connectWallet() {
     try {
       if (!wallet) {
-        wallet = new window.beacon.BeaconWallet({
+        wallet = new window.BeaconWallet({
           name: "Draw to Mint",
           preferredNetwork: "ghostnet",
         });
       }
       await wallet.requestPermissions({ network: { type: "ghostnet" } });
       userAddress = await wallet.getPKH();
-      status.innerText = "Wallet: " + shortenAddress(userAddress);
+      status.textContent = "Wallet: " + shortenAddress(userAddress);
       return true;
     } catch (err) {
       console.error("Wallet connect failed:", err);
-      status.innerText = "❌ Wallet connection failed";
+      status.textContent = "❌ Wallet connection failed: " + (err.message || err);
       return false;
     }
   }
