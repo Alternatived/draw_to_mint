@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Draw to Mint</title>
-  
+
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
-  <!-- Local Stylesheet -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- Style with version trick to bust cache -->
+  <link rel="stylesheet" href="style.css?v=2" />
 
   <!-- p5.js Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
 
-  <!-- Local JS -->
+  <!-- Your Mint Logic -->
   <script src="mint.js" defer></script>
 </head>
 <body>
@@ -58,7 +58,7 @@
     <div id="status" class="status">Wallet: Not connected</div>
   </div>
 
-  <!-- Sketch -->
+  <!-- p5 sketch -->
   <script src="sketch.js"></script>
 </body>
 </html>
