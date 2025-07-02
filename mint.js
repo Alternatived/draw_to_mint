@@ -9,7 +9,7 @@ window.addEventListener('load', () => {
   async function connectWallet() {
     try {
       if (!wallet) {
-        wallet = new window.BeaconWallet({
+        wallet = new window.Beacon.BeaconWallet({
           name: "Draw to Mint",
           preferredNetwork: "ghostnet",
         });
