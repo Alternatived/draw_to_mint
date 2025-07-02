@@ -1,63 +1,51 @@
+let cols = 8;
+let rows = 8;
+let grid = [];
 let pixelSize;
-const cols = 8, rows = 8;
-let canvas;
-
-const palettes = {
-  Retro: [
-    '#000000',
-    '#ff0000',
-    '#00ff00',
-    '#0000ff',
-    '#ffff00',
-    '#ff00ff',
-    '#00ffff',
-    '#ffffff'
-  ]
-};
-
-let currentPalette = palettes.Retro;
-let currentColor = currentPalette[7]; // white by default
-
-let grid;
-let history = [];
-let historyIndex = -1;
+let currentColor = [0, 0, 0];
 let drawing = false;
 
+let palette = [
+  [0, 0, 0],
+  [255, 0, 0],
+  [0, 255, 0],
+  [0, 0, 255],
+  [255, 255, 0],
+  [255, 0, 255],
+  [0, 255, 255],
+  [255, 255, 255],
+];
+
+let history = [];
+let redoStack = [];
+
 function setup() {
-  const canvasSize = 320;
+  let canvasSize = 400;
   pixelSize = canvasSize / cols;
-  canvas = createCanvas(canvasSize, canvasSize);
-  canvas.parent('canvas-container');
-  noSmooth();
+  let canvas = createCanvas(canvasSize, canvasSize);
+  canvas.parent("canvas-container");
+  noStroke();
   initGrid();
-  createPaletteUI();
-  bindButtons();
-
-  canvas.mousePressed(() => { drawing = true; drawPixel(mouseX, mouseY); });
-  canvas.mouseReleased(() => drawing = false);
-  canvas.touchStarted(() => { drawing = true; drawPixel(mouseX, mouseY); return false; });
-  canvas.touchEnded(() => { drawing = false; return false; });
-
-  noLoop();
-  redraw();
+  drawPalette();
 }
 
 function draw() {
-  background('#ffffff');
-  drawGrid();
-}
-
-function initGrid() {
-  grid = Array(cols).fill().map(() => Array(rows).fill(currentPalette[0]));
-  saveHistory();
-}
-
-function drawGrid() {
-  noStroke();
+  background(220);
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       fill(grid[i][j]);
       rect(i * pixelSize, j * pixelSize, pixelSize, pixelSize);
+    }
+  }
+
+  if (drawing && mouseIsPressed) drawPixel(mouseX, mouseY);
+}
+
+function initGrid() {
+  for (let i = 0; i < cols; i++) {
+    grid[i] = [];
+    for (let j = 0; j < rows; j++) {
+      grid[i][j] = [255, 255, 255];
     }
   }
 }
@@ -65,80 +53,65 @@ function drawGrid() {
 function drawPixel(x, y) {
   let i = floor(x / pixelSize);
   let j = floor(y / pixelSize);
-  if (i < 0 || i >= cols || j < 0 || j >= rows) return;
-
-  if (grid[i][j] !== currentColor) {
-    grid[i][j] = currentColor;
-    saveHistory();
-    redraw();
+  if (i >= 0 && i < cols && j >= 0 && j < rows) {
+    pushHistory();
+    grid[i][j] = currentColor.slice();
   }
 }
 
-function createPaletteUI() {
-  const paletteContainer = document.getElementById('palette');
-  currentPalette.forEach(color => {
-    const btn = document.createElement('div');
-    btn.className = 'colorButton';
-    btn.style.backgroundColor = color;
-    btn.addEventListener('click', () => {
+function drawPalette() {
+  let paletteDiv = document.getElementById("palette");
+  paletteDiv.innerHTML = "";
+  palette.forEach((color, index) => {
+    let btn = document.createElement("button");
+    btn.style.backgroundColor = `rgb(${color})`;
+    btn.className = "color-button";
+    btn.onclick = () => {
       currentColor = color;
-      updatePaletteUI();
-    });
-    paletteContainer.appendChild(btn);
-  });
-  updatePaletteUI();
-}
-
-function updatePaletteUI() {
-  const buttons = document.querySelectorAll('.colorButton');
-  buttons.forEach(btn => {
-    if (btn.style.backgroundColor === currentColor) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
+    };
+    paletteDiv.appendChild(btn);
   });
 }
 
-function bindButtons() {
-  document.getElementById('clear').addEventListener('click', () => {
-    initGrid();
-    redraw();
-  });
-
-  document.getElementById('undo').addEventListener('click', () => {
-    undo();
-  });
-
-  document.getElementById('redo').addEventListener('click', () => {
-    redo();
-  });
+function mousePressed() {
+  drawing = true;
+  drawPixel(mouseX, mouseY);
 }
 
-function saveHistory() {
-  // Save a deep copy of the grid
-  history = history.slice(0, historyIndex + 1);
-  history.push(grid.map(col => col.slice()));
-  historyIndex++;
+function mouseReleased() {
+  drawing = false;
+}
+
+function pushHistory() {
+  let copy = grid.map(col => col.map(px => [...px]));
+  history.push(copy);
+  redoStack = [];
 }
 
 function undo() {
-  if (historyIndex > 0) {
-    historyIndex--;
-    grid = history[historyIndex].map(col => col.slice());
-    redraw();
+  if (history.length > 0) {
+    redoStack.push(grid.map(col => col.map(px => [...px])));
+    grid = history.pop();
   }
 }
 
 function redo() {
-  if (historyIndex < history.length - 1) {
-    historyIndex++;
-    grid = history[historyIndex].map(col => col.slice());
-    redraw();
+  if (redoStack.length > 0) {
+    history.push(grid.map(col => col.map(px => [...px])));
+    grid = redoStack.pop();
   }
 }
 
-// Function to export current canvas as PNG data URL
-function exportPNGDataURL() {
-  return canvas.elt.toDataURL('image/png');
+function clearGrid() {
+  pushHistory();
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      grid[i][j] = [255, 255, 255];
+    }
+  }
+}
+
+function mintFrame() {
+  const data = grid.flat().map(c => c.join(",")).join(";");
+  alert("Minting frame: " + data);
 }
