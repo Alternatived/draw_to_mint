@@ -1,0 +1,84 @@
+body {
+  background: #c0c0c0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#app {
+  background: white;
+  border: 3px solid #000080;
+  padding: 16px;
+  width: 320px;
+  box-shadow: 4px 4px 0 #808080;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 12px 0;
+  color: #000080;
+  text-shadow: 1px 1px white;
+  user-select: none;
+}
+
+#canvas-container canvas {
+  image-rendering: pixelated;
+  border: 2px solid #000080;
+  display: block;
+  margin: 0 auto 12px auto;
+}
+
+#palette {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.colorButton {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #808080;
+  cursor: pointer;
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #404040;
+  user-select: none;
+}
+
+.colorButton.active {
+  border-color: #000080;
+  box-shadow: 0 0 5px #0000ff;
+}
+
+#toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+button {
+  font-weight: bold;
+  border: 2px solid #000080;
+  background: #e0e0e0;
+  cursor: pointer;
+  padding: 6px 12px;
+  box-shadow: 2px 2px 0 #808080;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+button:hover {
+  background: #c0c0ff;
+}
+
+#wallet-status {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #000080;
+  text-align: center;
+  user-select: none;
+}
