@@ -17,10 +17,11 @@ let palettes = {
 };
 
 function setup() {
-  const canvas = createCanvas(gridSize * pixelSize, gridSize * pixelSize);
+  let canvas = createCanvas(gridSize * pixelSize, gridSize * pixelSize);
   canvas.parent('canvas-container');
   noSmooth();
 
+  // Init grid with black pixels
   for (let y = 0; y < gridSize; y++) {
     pixels[y] = [];
     for (let x = 0; x < gridSize; x++) {
@@ -29,7 +30,7 @@ function setup() {
   }
 
   updatePaletteUI('Teletext');
-  setupUIListeners();
+  createUIListeners();
 }
 
 function draw() {
@@ -69,8 +70,8 @@ function mouseReleased() {
 function drawPixel() {
   if (!isDrawing || !mouseInCanvas()) return;
 
-  const x = floor(mouseX / pixelSize);
-  const y = floor(mouseY / pixelSize);
+  let x = floor(mouseX / pixelSize);
+  let y = floor(mouseY / pixelSize);
 
   if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
     saveUndo();
@@ -82,18 +83,16 @@ function setPixel(x, y, color) {
   pixels[y][x] = color;
 
   if (symmetryX) {
-    const sx = gridSize - 1 - x;
+    let sx = gridSize - 1 - x;
     pixels[y][sx] = color;
   }
-
   if (symmetryY) {
-    const sy = gridSize - 1 - y;
+    let sy = gridSize - 1 - y;
     pixels[sy][x] = color;
   }
-
   if (symmetryX && symmetryY) {
-    const sx = gridSize - 1 - x;
-    const sy = gridSize - 1 - y;
+    let sx = gridSize - 1 - x;
+    let sy = gridSize - 1 - y;
     pixels[sy][sx] = color;
   }
 }
@@ -102,20 +101,23 @@ function mouseInCanvas() {
   return mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height;
 }
 
-function saveUndo() {
-  undoStack.push(JSON.parse(JSON.stringify(pixels)));
-  redoStack = [];
-}
-
-function setupUIListeners() {
+function createUIListeners() {
   document.getElementById('clear').onclick = () => {
     saveUndo();
-    fillAllPixels('#000000');
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        pixels[y][x] = '#000000';
+      }
+    }
   };
 
   document.getElementById('fill').onclick = () => {
     saveUndo();
-    fillAllPixels(currentColor);
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        pixels[y][x] = currentColor;
+      }
+    }
   };
 
   document.getElementById('undo').onclick = () => {
@@ -152,21 +154,13 @@ function setupUIListeners() {
   };
 }
 
-function fillAllPixels(color) {
-  for (let y = 0; y < gridSize; y++) {
-    for (let x = 0; x < gridSize; x++) {
-      pixels[y][x] = color;
-    }
-  }
-}
-
 function updatePaletteUI(paletteName) {
-  const palette = palettes[paletteName];
-  const paletteContainer = document.getElementById('palette');
+  let palette = palettes[paletteName];
+  let paletteContainer = document.getElementById('palette');
   paletteContainer.innerHTML = '';
 
   palette.forEach(color => {
-    const btn = document.createElement('div');
+    let btn = document.createElement('div');
     btn.className = 'color-button';
     btn.style.backgroundColor = color;
 
@@ -183,4 +177,9 @@ function updatePaletteUI(paletteName) {
   if (paletteContainer.firstChild) {
     paletteContainer.firstChild.click();
   }
+}
+
+function saveUndo() {
+  undoStack.push(JSON.parse(JSON.stringify(pixels)));
+  redoStack = [];
 }
