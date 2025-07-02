@@ -2,48 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Draw to Mint</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-  <script src="sketch.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
   <script src="mint.js" defer></script>
 </head>
 <body>
-  <div id="app">
-    <h1 class="title">🎨 Draw to Mint</h1>
+  <div class="window">
+    <div class="title-bar">🎨 Draw to Mint</div>
 
-    <div id="canvas-container"></div>
+    <div class="section" id="canvas-container"></div>
 
     <div class="divider"></div>
 
-    <div id="palette-section">
-      <div id="palette-header">
-        <select id="palettePicker"></select>
-      </div>
-      <div id="palette"></div>
+    <div class="section">
+      <label for="palettePicker">Palette:</label>
+      <select id="palettePicker">
+        <option value="Teletext">Teletext</option>
+        <option value="Gameboy">Gameboy</option>
+        <option value="CMYK">CMYK</option>
+        <option value="Mono">Mono</option>
+      </select>
+      <div id="palette" class="palette"></div>
     </div>
 
     <div class="divider"></div>
 
-    <div id="controls">
-      <button id="clear">Clear</button>
-      <button id="fill">Fill</button>
-      <button id="undo">Undo</button>
-      <button id="redo">Redo</button>
-      <button id="symX">X</button>
-      <button id="symY">Y</button>
-      <button id="gridToggle">Grid</button>
+    <div class="section buttons">
+      <button id="clear">🧹 Clear</button>
+      <button id="fill">🪣 Fill</button>
+      <button id="undo">↩️ Undo</button>
+      <button id="redo">↪️ Redo</button>
+      <button id="symX">↔️ X</button>
+      <button id="symY">↕️ Y</button>
+      <button id="gridToggle">🧱 Grid</button>
     </div>
 
     <div class="divider"></div>
 
-    <div id="mint-section">
-      <button id="connectWallet">🔗 Connect Wallet</button>
-      <button id="mintButton">🧬 Mint smol onchain art</button>
+    <div class="section buttons">
+      <button id="connectWallet">🔌 Connect Wallet</button>
+      <button id="mint">🪙 Mint Smol Onchain Art</button>
     </div>
 
-    <p class="footer">Built with 💾 by @alternatived</p>
+    <div id="status" class="status">Wallet: Not connected</div>
   </div>
+
+  <script src="sketch.js"></script>
 </body>
 </html>
