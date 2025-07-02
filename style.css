@@ -72,7 +72,7 @@ body {
 }
 
 /* TOOL BUTTONS - grid layout */
-.section.buttons:first-of-type {
+.tool-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 40px;
@@ -83,7 +83,7 @@ body {
 }
 
 /* WALLET & MINT buttons - flex row */
-.section.buttons:last-of-type {
+.wallet-buttons {
   display: flex;
   justify-content: center;
   gap: 12px;
