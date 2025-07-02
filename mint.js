@@ -1,4 +1,4 @@
-const { BeaconWallet } = beacon;
+const { BeaconWallet } = window.beacon;
 
 let wallet;
 let userAddress = null;
@@ -15,7 +15,7 @@ window.addEventListener('load', () => {
     if (!wallet) {
       wallet = new BeaconWallet({
         name: "Draw to Mint",
-        preferredNetwork: "ghostnet" // or "mainnet" later
+        preferredNetwork: "ghostnet" // ✅ or 'mainnet' for production
       });
     }
 
@@ -35,7 +35,6 @@ window.addEventListener('load', () => {
       if (!userAddress) return;
     }
 
-    // 🚧 Placeholder: Add mint contract logic here
     alert("Minting not implemented yet.\nWallet: " + userAddress);
   }
 
