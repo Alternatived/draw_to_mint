@@ -3,17 +3,20 @@ window.addEventListener('load', () => {
   const mintBtn = document.getElementById("mint");
   const status = document.getElementById("status");
 
+  const { BeaconWallet } = beacon;
+
   let wallet;
   let userAddress = null;
 
   async function connectWallet() {
     try {
       if (!wallet) {
-        wallet = new window.Beacon.BeaconWallet({
+        wallet = new BeaconWallet({
           name: "Draw to Mint",
           preferredNetwork: "ghostnet",
         });
       }
+
       await wallet.requestPermissions({ network: { type: "ghostnet" } });
       userAddress = await wallet.getPKH();
       status.textContent = "Wallet: " + shortenAddress(userAddress);
