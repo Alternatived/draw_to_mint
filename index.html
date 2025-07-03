@@ -2,16 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Draw to Mint</title>
-
-  <!-- Font and Style -->
+  
+  <!-- Fonts and style -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css" />
+  
+  <!-- Beacon SDK UMD -->
+  <script src="https://unpkg.com/@airgap/beacon-sdk@4.5.1/dist/index.umd.js"></script>
 
-  <!-- p5.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
+  <!-- Your mint.js script (defer so it runs after Beacon SDK) -->
+  <script src="mint.js" defer></script>
 </head>
 <body>
   <div class="window">
@@ -53,10 +55,9 @@
     <div id="status" class="status">Wallet: Not connected</div>
   </div>
 
-  <!-- p5 sketch -->
-  <script src="sketch.js?v=5"></script>
-
-  <!-- Beacon-compatible mint module -->
-  <script type="module" src="mint.js?v=5"></script>
+  <!-- p5.js lib -->
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script>
+  <!-- Your sketch -->
+  <script src="sketch.js"></script>
 </body>
 </html>
