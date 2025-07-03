@@ -1,8 +1,7 @@
 // mint.js
-import { DAppClient } from 'https://cdn.jsdelivr.net/npm/@airgap/beacon-sdk@4.6.0/dist/esm/browser/beacon.min.js';
+import { DAppClient } from 'https://cdn.jsdelivr.net/npm/@airgap/beacon-sdk@4.6.0/dist/esm/beacon.min.js';
 
 const client = new DAppClient({ name: "Draw to Mint" });
-
 let userAddress = null;
 
 window.addEventListener('load', () => {
@@ -28,10 +27,10 @@ window.addEventListener('load', () => {
         network: { type: 'ghostnet' }
       });
       userAddress = permissions.address;
-      status.textContent = `Wallet: ${shortenAddress(userAddress)}`;
+      status.textContent = "Wallet: " + shortenAddress(userAddress);
       return true;
     } catch (err) {
-      console.error("Wallet connection failed:", err);
+      console.error("Wallet connect failed:", err);
       status.textContent = "❌ Wallet connection failed";
       return false;
     }
