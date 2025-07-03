@@ -6,12 +6,6 @@
   <title>Draw to Mint</title>
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Beacon SDK -->
-  <script src="https://unpkg.com/@airgap/beacon-sdk@3.0.6/dist/index.umd.min.js"></script>
-
-  <!-- Your wallet logic -->
-  <script src="mint.js" defer></script>
 </head>
 <body>
   <div class="window">
@@ -53,11 +47,12 @@
     <div id="status" class="status">Wallet: Not connected</div>
   </div>
 
-  <!-- p5.js -->
+  <!-- p5.js sketch -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
-
-  <!-- Load sketch after DOM and wallet -->
   <script src="sketch.js"></script>
+
+  <!-- Load mint.js as ES module -->
+  <script type="module" src="mint.js"></script>
 </body>
 </html>
