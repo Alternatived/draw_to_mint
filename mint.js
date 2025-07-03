@@ -1,3 +1,4 @@
+// mint.js
 import { DAppClient } from 'https://cdn.jsdelivr.net/npm/@airgap/beacon-sdk@4.6.0/dist/esm/browser/beacon.min.js';
 
 const client = new DAppClient({ name: "Draw to Mint" });
