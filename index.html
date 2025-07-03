@@ -4,22 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Draw to Mint</title>
-  
-  <!-- Fonts and style -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  
-  <!-- Beacon SDK UMD -->
+
+  <!-- Beacon SDK (correct UNPKG URL, UMD build) -->
   <script src="https://unpkg.com/@airgap/beacon-sdk@4.5.1/dist/index.umd.js"></script>
 
-  <!-- Your mint.js script (defer so it runs after Beacon SDK) -->
+  <!-- mint.js must load after Beacon SDK -->
   <script src="mint.js" defer></script>
 </head>
 <body>
   <div class="window">
     <div class="title-bar">🎨 Draw to Mint</div>
 
-    <div class="section" id="canvas-container"></div>
+    <div id="canvas-container"></div>
 
     <div class="divider"></div>
 
@@ -55,9 +53,7 @@
     <div id="status" class="status">Wallet: Not connected</div>
   </div>
 
-  <!-- p5.js lib -->
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script>
-  <!-- Your sketch -->
+  <!-- p5.js sketch -->
   <script src="sketch.js"></script>
 </body>
 </html>
