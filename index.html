@@ -7,10 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Beacon SDK exposing global 'Beacon' -->
-  <script src="https://unpkg.com/@airgap/beacon-sdk@latest/dist/index.umd.js"></script>
+  <!-- Beacon SDK -->
+  <script src="https://unpkg.com/@airgap/beacon-sdk@3.0.6/dist/index.umd.min.js"></script>
 
-  <!-- mint.js loads after Beacon SDK -->
+  <!-- Your wallet logic -->
   <script src="mint.js" defer></script>
 </head>
 <body>
@@ -53,7 +53,11 @@
     <div id="status" class="status">Wallet: Not connected</div>
   </div>
 
-  <!-- p5.js sketch -->
+  <!-- p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
+
+  <!-- Load sketch after DOM and wallet -->
   <script src="sketch.js"></script>
 </body>
 </html>
