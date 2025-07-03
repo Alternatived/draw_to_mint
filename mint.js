@@ -1,6 +1,4 @@
 window.addEventListener('load', () => {
-  console.log("Beacon SDK loaded?", !!window.Beacon);
-
   const connectBtn = document.getElementById("connectWallet");
   const mintBtn = document.getElementById("mint");
   const status = document.getElementById("status");
@@ -11,18 +9,19 @@ window.addEventListener('load', () => {
   async function connectWallet() {
     try {
       if (!wallet) {
-        // NOTE: Use window.Beacon.BeaconWallet, NOT window.BeaconWallet
+        // Use the BeaconWallet from the loaded Beacon SDK
         wallet = new window.Beacon.BeaconWallet({
           name: "Draw to Mint",
           preferredNetwork: "ghostnet",
         });
       }
 
+      // Request permissions (this triggers wallet popup)
       await wallet.requestPermissions({ network: { type: "ghostnet" } });
-      userAddress = await wallet.getPKH();
 
+      // Get user address (PKH)
+      userAddress = await wallet.getPKH();
       status.textContent = "Wallet: " + shortenAddress(userAddress);
-      console.log("Connected wallet:", userAddress);
 
       return true;
     } catch (err) {
