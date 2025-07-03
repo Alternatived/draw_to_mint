@@ -1,37 +1,50 @@
-// mint.js
-import { DAppClient } from 'https://cdn.jsdelivr.net/npm/@airgap/beacon-sdk@4.5.1/dist/esm/beacon-sdk.browser.js';
-
-const client = new DAppClient({ name: "Draw to Mint" });
-let userAddress = null;
-
 window.addEventListener('load', () => {
+  console.log("Beacon SDK loaded?", !!window.BeaconWallet);
+
   const connectBtn = document.getElementById("connectWallet");
   const mintBtn = document.getElementById("mint");
   const status = document.getElementById("status");
 
-  connectBtn.addEventListener("click", connectWallet);
-  mintBtn.addEventListener("click", async () => {
-    if (!userAddress) {
-      const ok = await connectWallet();
-      if (!ok) return;
-    }
-    alert(`Minting not implemented yet.\nConnected wallet: ${userAddress}`);
-  });
+  let wallet;
+  let userAddress = null;
 
   async function connectWallet() {
     try {
-      const permissions = await client.requestPermissions({ network: { type: 'ghostnet' } });
-      userAddress = permissions.address;
-      status.textContent = "Wallet: " + shorten(userAddress);
+      if (!wallet) {
+        // UMD bundle exposes BeaconWallet as window.BeaconWallet.BeaconWallet
+        wallet = new window.BeaconWallet.BeaconWallet({
+          name: "Draw to Mint",
+          preferredNetwork: "ghostnet",
+        });
+      }
+
+      await wallet.requestPermissions({ network: { type: "ghostnet" } });
+      userAddress = await wallet.getPKH();
+
+      status.textContent = "Wallet: " + shortenAddress(userAddress);
+      console.log("Connected wallet:", userAddress);
+
       return true;
     } catch (err) {
-      console.error("Wallet connection failed:", err);
-      status.textContent = "❌ Wallet connection failed";
+      console.error("Wallet connect failed:", err);
+      status.textContent = "❌ Wallet connection failed: " + (err.message || err);
       return false;
     }
   }
 
-  function shorten(addr) {
+  connectBtn.addEventListener("click", async () => {
+    await connectWallet();
+  });
+
+  mintBtn.addEventListener("click", async () => {
+    if (!userAddress) {
+      const connected = await connectWallet();
+      if (!connected) return;
+    }
+    alert(`Minting not implemented yet.\nConnected wallet: ${userAddress}`);
+  });
+
+  function shortenAddress(addr) {
     return addr.slice(0, 6) + "..." + addr.slice(-4);
   }
 });
