@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Draw to Mint</title>
+
+  <!-- Font and Style -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=5" />
+
+  <!-- p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
 </head>
 <body>
   <div class="window">
@@ -47,12 +53,10 @@
     <div id="status" class="status">Wallet: Not connected</div>
   </div>
 
-  <!-- p5.js Sketch -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
-  <script src="sketch.js?v=4"></script>
+  <!-- p5 sketch -->
+  <script src="sketch.js?v=5"></script>
 
-  <!-- Mint logic with correct Beacon ESM -->
-  <script type="module" src="mint.js?v=4"></script>
+  <!-- Beacon-compatible mint module -->
+  <script type="module" src="mint.js?v=5"></script>
 </body>
 </html>
