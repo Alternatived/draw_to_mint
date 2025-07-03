@@ -1,5 +1,5 @@
 window.addEventListener('load', () => {
-  console.log("Beacon SDK loaded?", !!window.BeaconWallet);
+  console.log("Beacon SDK loaded?", !!window.Beacon);
 
   const connectBtn = document.getElementById("connectWallet");
   const mintBtn = document.getElementById("mint");
@@ -11,8 +11,8 @@ window.addEventListener('load', () => {
   async function connectWallet() {
     try {
       if (!wallet) {
-        // UMD bundle exposes BeaconWallet as window.BeaconWallet.BeaconWallet
-        wallet = new window.BeaconWallet.BeaconWallet({
+        // NOTE: Use window.Beacon.BeaconWallet, NOT window.BeaconWallet
+        wallet = new window.Beacon.BeaconWallet({
           name: "Draw to Mint",
           preferredNetwork: "ghostnet",
         });
