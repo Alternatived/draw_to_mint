@@ -16,12 +16,11 @@ let palettes = {
   Mono: ['#000000', '#222222', '#444444', '#666666', '#888888', '#aaaaaa', '#cccccc', '#ffffff']
 };
 
-function setup() {
+window.setup = function () {
   let canvas = createCanvas(gridSize * pixelSize, gridSize * pixelSize);
   canvas.parent('canvas-container');
   noSmooth();
 
-  // Init grid with black pixels
   for (let y = 0; y < gridSize; y++) {
     pixels[y] = [];
     for (let x = 0; x < gridSize; x++) {
@@ -31,9 +30,9 @@ function setup() {
 
   updatePaletteUI('Teletext');
   createUIListeners();
-}
+};
 
-function draw() {
+window.draw = function () {
   background('#ffffff');
 
   for (let y = 0; y < gridSize; y++) {
@@ -52,7 +51,7 @@ function draw() {
       line(0, i * pixelSize, width, i * pixelSize);
     }
   }
-}
+};
 
 function mousePressed() {
   isDrawing = true;
@@ -82,19 +81,9 @@ function drawPixel() {
 function setPixel(x, y, color) {
   pixels[y][x] = color;
 
-  if (symmetryX) {
-    let sx = gridSize - 1 - x;
-    pixels[y][sx] = color;
-  }
-  if (symmetryY) {
-    let sy = gridSize - 1 - y;
-    pixels[sy][x] = color;
-  }
-  if (symmetryX && symmetryY) {
-    let sx = gridSize - 1 - x;
-    let sy = gridSize - 1 - y;
-    pixels[sy][sx] = color;
-  }
+  if (symmetryX) pixels[y][gridSize - 1 - x] = color;
+  if (symmetryY) pixels[gridSize - 1 - y][x] = color;
+  if (symmetryX && symmetryY) pixels[gridSize - 1 - y][gridSize - 1 - x] = color;
 }
 
 function mouseInCanvas() {
@@ -156,26 +145,23 @@ function createUIListeners() {
 
 function updatePaletteUI(paletteName) {
   let palette = palettes[paletteName];
-  let paletteContainer = document.getElementById('palette');
-  paletteContainer.innerHTML = '';
+  let container = document.getElementById('palette');
+  container.innerHTML = '';
 
   palette.forEach(color => {
     let btn = document.createElement('div');
     btn.className = 'color-button';
     btn.style.backgroundColor = color;
-
     btn.onclick = () => {
       currentColor = color;
       document.querySelectorAll('.color-button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     };
-
-    paletteContainer.appendChild(btn);
+    container.appendChild(btn);
   });
 
-  // Auto-select first color
-  if (paletteContainer.firstChild) {
-    paletteContainer.firstChild.click();
+  if (container.firstChild) {
+    container.firstChild.click();
   }
 }
 
